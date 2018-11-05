@@ -24,14 +24,6 @@ bld/
 [Oo]bj/
 [Ll]og/
 
-# GAME EXCLUSIONS:
-*.map
-
-# Visual Studio project file
-*.vcxproj
-*.sln
-*.filters
-
 # Visual Studio 2015/2017 cache/options directory
 .vs/
 # Uncomment if you have tasks that create the project's static files in wwwroot
@@ -336,3 +328,8 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+
++*.map
++.vcxproj
++.sln
++.filters
