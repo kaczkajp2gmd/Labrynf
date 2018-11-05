@@ -24,6 +24,9 @@ bld/
 [Oo]bj/
 [Ll]og/
 
+# GAME EXCLUSIONS:
+*.map
+
 # Visual Studio project file
 *.vcxproj
 *.filters
