@@ -29,6 +29,7 @@ bld/
 
 # Visual Studio project file
 *.vcxproj
+*.sln
 *.filters
 
 # Visual Studio 2015/2017 cache/options directory
