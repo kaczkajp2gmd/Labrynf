@@ -5,17 +5,20 @@
 
 using namespace irr;
 
+class AnimatedObject;
+
 class Animator
 {
-	core::array<AnimatedObject*> objects;
+	static core::array<AnimatedObject*> objects;
 
-	ITimer* timer;
+	static ITimer* timer;
 
 	public:
-		Animator(ITimer* timer_);
+		Animator();
 		~Animator();
 
-		void registerObject(AnimatedObject* obj);
-		void unregisterObject(AnimatedObject* obj);
-		void update();
+		static void setTimer(ITimer* t);
+		static void registerObject(AnimatedObject* obj);
+		static void unregisterObject(AnimatedObject* obj);
+		static void update();
 };

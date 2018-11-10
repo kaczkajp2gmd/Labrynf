@@ -36,15 +36,14 @@ int main()
 		stringw fps_txt;
 	#endif
 
-	Animator animator(device->getTimer());
-    
-	Map map(5, 128, &animator, driver, guienv, screen_size);
-	animator.registerObject(map.getDimer());
-	animator.registerObject(&map);
+	Animator::setTimer(device->getTimer());
 
-	Character character(100, 5, driver, guienv);
-	map.setCharacter(&character);
-	animator.registerObject(&character);
+	Map map(5, 128, device, screen_size);
+
+	GameObjectFactory f(device);
+
+	Character* character = (Character*) f.instantiateGameObject("media/character.gobj");
+	map.setCharacter(character);
 
     CEventReceiver receiver(device);
 	device->setEventReceiver(&receiver);
@@ -57,9 +56,9 @@ int main()
 	{
 		driver->beginScene(true, false, SColor(255, 0, 0, 0));
         
-		animator.update();
+		Animator::update();
 
-		character.react(&receiver);
+		character->react(&receiver);
 		map.react(&receiver);
 
 		guienv->drawAll();

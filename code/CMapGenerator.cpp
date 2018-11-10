@@ -1,6 +1,7 @@
 #include "CMapGenerator.h"
 
-MapGenerator::MapGenerator()
+MapGenerator::MapGenerator(IrrlichtDevice* device)
+	: _device(device)
 {
 	srand(time(0));
 }
@@ -17,15 +18,25 @@ void MapGenerator::createMap(u32 size, bool serialize, io::path path)
 	current_map.clear();
 
 	core::array<FieldCache> arr;
+	
+	ITexture* texture = _device->getVideoDriver()->getTexture("media/plane.png");
+	assert(texture);
 
 	for (int y = 0; y < size; y++)
 	{
 		for (int x = 0; x < size; x++)
-			arr.push_back(FieldCache());
+		{
+			FieldCache field;
+			
+			field.texture = texture;
+			
+			arr.push_back(field);
+		}
 
 		current_map.push_back(arr);
 		arr.clear();
 	}
+
 
 	generate(current_map);
 	setRunesAndOrbs(1);
@@ -92,7 +103,9 @@ void MapGenerator::deleteOrb(position2d<s32> orbpos)
 	if (index == -1)
 		return;
 
-	current_map[orbpos.Y][orbpos.X].orb = false;
+	delete current_map[orbpos.Y][orbpos.X].object;
+	current_map[orbpos.Y][orbpos.X].object = NULL;
+
 	orbs.erase(index);
 }
 
@@ -103,7 +116,7 @@ void MapGenerator::activateRune(position2d<s32> runepos)
 	if (index == -1)
 		return;
 
-	current_map[runepos.Y][runepos.X].activated = true;
+	((ObjectRune*) current_map[runepos.Y][runepos.X].object)->activate(true);
 }
 
 bool MapGenerator::hasField(int x, int y)
@@ -248,12 +261,15 @@ void MapGenerator::setRunesAndOrbs(u32 howMany)
 				{
 					if (c >= howMany)
 					{
-						current_map[y][x].rune = true;
+						GameObjectFactory f(_device);
+
+						current_map[y][x].object = f.instantiateGameObject("media/rune_green.gobj");
 						runes.push_back(position2d<s32>(x, y));
 					}
 					else
 					{
-						current_map[y][x].orb = true;
+						GameObjectFactory f(_device);
+						current_map[y][x].object = f.instantiateGameObject("media/orb_green.gobj");
 						orbs.push_back(position2d<s32>(x, y));
 					}
 				}

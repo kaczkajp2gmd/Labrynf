@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<animfile>
+
+	<file filename="rune_green_" extension=".png" image_count="5">
+
+	<anim tag="IDLE" start_frame="0" end_frame="0" delta_frame="0">
+
+	<anim tag="ACTIVATED" start_frame="1" end_frame="4" delta_frame="100">
+	
+</animfile>

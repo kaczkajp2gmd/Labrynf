@@ -23,9 +23,11 @@
     <ClInclude Include="code\CAnimator.h" />
     <ClInclude Include="code\CCharacter.h" />
     <ClInclude Include="code\CDebugManager.h" />
-    <ClInclude Include="code\CDebugObject.h" />
+    <ClInclude Include="code\CGameObjectFactory.h" />
+    <ClInclude Include="code\IDebugObject.h" />
     <ClInclude Include="code\CDimer.h" />
-    <ClInclude Include="code\CEventHandler.h" />
+    <ClInclude Include="code\IObjectEntity.h" />
+    <ClInclude Include="code\IEventHandler.h" />
     <ClInclude Include="code\CEventReceiver.h" />
     <ClInclude Include="code\CField.h" />
     <ClInclude Include="code\CGameObject.h" />
@@ -34,8 +36,6 @@
     <ClInclude Include="code\CObjectOrb.h" />
     <ClInclude Include="code\CObjectRune.h" />
     <ClInclude Include="code\CSoundPlayer.h" />
-    <ClInclude Include="code\EExceptions.h" />
-    <ClInclude Include="code\EGameObject.h" />
     <ClInclude Include="code\SFieldCache.h" />
   </ItemGroup>
   <ItemGroup>
@@ -43,9 +43,11 @@
     <ClCompile Include="code\CAnimator.cpp" />
     <ClCompile Include="code\CCharacter.cpp" />
     <ClCompile Include="code\CDebugManager.cpp" />
-    <ClCompile Include="code\CDebugObject.cpp" />
+    <ClCompile Include="code\CGameObjectFactory.cpp" />
+    <ClCompile Include="code\IDebugObject.cpp" />
     <ClCompile Include="code\CDimer.cpp" />
-    <ClCompile Include="code\CEventHandler.cpp" />
+    <ClCompile Include="code\IObjectEntity.cpp" />
+    <ClCompile Include="code\IEventHandler.cpp" />
     <ClCompile Include="code\CEventReceiver.cpp" />
     <ClCompile Include="code\CField.cpp" />
     <ClCompile Include="code\CGameObject.cpp" />
@@ -55,6 +57,7 @@
     <ClCompile Include="code\CObjectRune.cpp" />
     <ClCompile Include="code\CSoundPlayer.cpp" />
     <ClCompile Include="code\main.cpp" />
+    <ClCompile Include="code\SFieldCache.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E21DD4D8-48B2-439C-8BDD-831D773873CA}</ProjectGuid>

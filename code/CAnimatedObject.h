@@ -1,17 +1,45 @@
 #pragma once
 
+#include <irrlicht.h>
+#include <cassert>
+#include <iostream>
+#include <string>
+#include "CAnimator.h"
+
+using namespace irr;
+using namespace video;
+
 class AnimatedObject
 {
-		unsigned int delta_frame;
+	private:
+		struct Animation
+		{
+			core::stringc anim_tag;
+			u32 start_frame;
+			u32 end_frame;
+			u32 delta_frame;
+		};
+
+	protected:
+		u32 TEXTURE_COUNT;
+		u32 delta_frame;
+		core::array<ITexture*> texture;
+		core::array<Animation> anims;
+
+		s32 tex_index;
+		s32 anim_index;
+
+		gui::IGUIImage* image;
 		
 	public:
-		AnimatedObject(unsigned int delta_frame_);
+		AnimatedObject(io::path filename, IVideoDriver* driver_, io::IFileSystem* fs);
 		~AnimatedObject();
 
-		virtual void anim_update() = 0;
+		void anim_update();
 
-		virtual void setDeltaFrame(unsigned int df);
-		virtual unsigned int getDeltaFrame() const;
+		void	setAnim(core::stringc anim_tag);
+		void	setDeltaFrame(unsigned int df);
+		u32		getDeltaFrame() const;
 		
-		unsigned int last_time;
+		u32		last_time;
 };

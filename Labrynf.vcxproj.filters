@@ -30,9 +30,6 @@
     <ClInclude Include="code\CCharacter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="code\EGameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="code\CField.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -54,19 +51,22 @@
     <ClInclude Include="code\CSoundPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="code\CDebugObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\EExceptions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="code\CEventReceiver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="code\CEventHandler.h">
+    <ClInclude Include="code\IDebugObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\IEventHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="code\CAnimatedObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\CGameObjectFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\IObjectEntity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -95,9 +95,6 @@
     <ClCompile Include="code\CGameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="code\CDebugObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="code\CDebugManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -113,10 +110,22 @@
     <ClCompile Include="code\CEventReceiver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="code\CEventHandler.cpp">
+    <ClCompile Include="code\SFieldCache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\IDebugObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\IEventHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\CAnimatedObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\CGameObjectFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\IObjectEntity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

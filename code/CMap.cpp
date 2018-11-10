@@ -1,15 +1,14 @@
 #include "CMap.h"
 
-Map::Map(u32 fov_radius, u32 field_pixel_size, Animator* animator_, IVideoDriver* driver_, IGUIEnvironment* guienv_, dimension2d<u32>& screen_size_)
-	: IGUIElement(EGUIET_IMAGE, guienv_, guienv_->getRootGUIElement(), -1,
-		rect<s32>(0, 0, (fov_radius)* field_pixel_size, (fov_radius)* field_pixel_size)),
-	AnimatedObject(0), DebugObject(), _driver(driver_), _guienv(guienv_), screen_size(screen_size_), _field_pixel_size(field_pixel_size),
-	delta_moved(0, 0), pos_on_map(0, 0), mv_direction(MD_NONE), animator(animator_)
+Map::Map(u32 fov_radius, u32 field_pixel_size, IrrlichtDevice* device, dimension2d<u32>& screen_size_)
+	: IGUIElement(EGUIET_IMAGE, device->getGUIEnvironment(), device->getGUIEnvironment()->getRootGUIElement(), -1,
+		rect<s32>(0, 0, (fov_radius)* field_pixel_size, (fov_radius)* field_pixel_size)), DebugObject(), EventHandler(device->getTimer()), _driver(device->getVideoDriver()), _guienv(device->getGUIEnvironment()), screen_size(screen_size_), _field_pixel_size(field_pixel_size),
+	delta_moved(0, 0), pos_on_map(0, 0), mv_direction(MD_NONE)
 {
 
-	__debug_position	= guienv_->addStaticText(L"", rect<s32>(0, 0, 100, 20));
-	__debug_runes		= guienv_->addStaticText(L"", rect<s32>(0, 20, 100, 200));
-	__debug_orbs		= guienv_->addStaticText(L"", rect<s32>(100, 20, 200, 200));
+	__debug_position	= _guienv->addStaticText(L"", rect<s32>(0, 0, 200, 20));
+	__debug_runes		= _guienv->addStaticText(L"", rect<s32>(0, 20, 100, 200));
+	__debug_orbs		= _guienv->addStaticText(L"", rect<s32>(100, 20, 200, 200));
 
 	__debug_position->setOverrideColor(SColor(255, 255, 0, 0));
 	__debug_runes->setOverrideColor(SColor(255, 200, 200, 0));
@@ -25,10 +24,10 @@ Map::Map(u32 fov_radius, u32 field_pixel_size, Animator* animator_, IVideoDriver
 
 	assert(fov_radius % 2 == 1);								//	Has to be unpair to provide symetrical vision
 
-	Tiles = guienv_->addTab(rect<s32>(), this);					// "Used to group elements" - check the description of IGUIEnvironment::addTab(...)
+	Tiles = _guienv->addTab(rect<s32>(), this);					// "Used to group elements" - check the description of IGUIEnvironment::addTab(...)
 	assert(Tiles);
 
-	mapgen = new MapGenerator();
+	mapgen = new MapGenerator(device);
 	mapgen->createMap(10, true, "map0.map");
 	
 	pos_on_map = mapgen->getStartPoint();
@@ -50,7 +49,7 @@ Map::Map(u32 fov_radius, u32 field_pixel_size, Animator* animator_, IVideoDriver
 	Tiles->setRelativePosition(rect<s32>(-(s32)field_pixel_size, -(s32)field_pixel_size, getMapSize() + field_pixel_size, getMapSize() + field_pixel_size));
 	moveToCenter();
 
-	dimer = new Dimer(this, driver_, guienv_);
+	dimer = new Dimer(this, device);
 }
 
 Map::~Map()
@@ -71,7 +70,6 @@ void Map::setCharacter(Character* character_)
 	character = character_;
 
 	character->setRelativePosition(position2d<s32>((screen_size.Width / 2) - (character->getSize() / 2), (screen_size.Height / 2) - (character->getSize() / 2)));
-	this->setDeltaFrame(character->getMovementSpeed());
 }
 
 void Map::move(MOVE_DIRECTION dir)
@@ -146,7 +144,7 @@ void Map::refreshMap()
 			else
 				cache = mapgen->getFieldCache(x + pos_on_map.X - dx, y + pos_on_map.Y - dy);
 			
-			map[y][x]->setCache(cache, animator, _driver, _guienv);
+			map[y][x]->setCache(cache, _driver, _guienv);
 		}
 }
 
@@ -184,22 +182,18 @@ void Map::handleGOCollision()
 
 			if (go && go->getAbsolutePosition().isRectCollided(character->getAbsolutePosition()))
 			{
-				switch (go->getGOType())
+				if (go->getGOType() == "GOT_RUNE")
 				{
-				case GOT_RUNE:
-					if (character->hasObject(GO_ORB_GREEN))
+					if (character->hasObject("Green Orb"))
 					{
 						mapgen->activateRune(mapFieldPosToPosOnMap(x, y));
-						character->removeObject(GO_ORB_GREEN);
+						character->removeObject("Green Orb");
 					}
-					break;
-
-				case GOT_ORB:
-					character->giveObject((GAME_OBJECT)go->getID());
+				}
+				else if (go->getGOType() == "GOT_ORB")
+				{
+					character->giveObject(go->getName());
 					mapgen->deleteOrb(mapFieldPosToPosOnMap(x, y));
-					break;
-
-				default:
 					break;
 				}
 
@@ -230,11 +224,12 @@ void Map::react(CEventReceiver* receiver)
 	else
 		mv_direction = MD_NONE;
 
-}
 
-void Map::anim_update()
-{
-	this->move(mv_direction);
+	if (timer->getTime() - time_last >= character->getMovementSpeed())
+	{
+		this->move(mv_direction);
+		time_last = timer->getTime();
+	}
 }
 
 void Map::showDebugInfo()

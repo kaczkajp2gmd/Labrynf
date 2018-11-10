@@ -2,13 +2,12 @@
 
 #include <irrlicht.h>
 #include <cmath>
-#include "EGameObject.h"
 #include "CField.h"
 #include "CDimer.h"
 #include "CCharacter.h"
-#include "CEventHandler.h"
+#include "IEventHandler.h"
 #include "CMapGenerator.h"
-#include "CDebugObject.h"
+#include "IDebugObject.h"
 #include "CObjectRune.h"
 
 using namespace irr;
@@ -16,7 +15,7 @@ using namespace video;
 
 class Dimer;
 
-class Map : public IGUIElement, public EventHandler, public AnimatedObject, public DebugObject
+class Map : public IGUIElement, public EventHandler, public DebugObject
 {
 	IGUIStaticText* __debug_position;
 	IGUIStaticText* __debug_runes;
@@ -35,7 +34,6 @@ class Map : public IGUIElement, public EventHandler, public AnimatedObject, publ
 	dimension2d<u32> screen_size;
 
 	Dimer* dimer;
-	Animator* animator;
 	Character* character;
 	MapGenerator* mapgen;
        
@@ -54,7 +52,7 @@ class Map : public IGUIElement, public EventHandler, public AnimatedObject, publ
 		MOVE_DIRECTION mv_direction;
 	
 	public:
-		Map(u32 fov_radius, u32 field_pixel_size, Animator* animator_, IVideoDriver* driver_, IGUIEnvironment* guienv_, dimension2d<u32>& screen_size_);
+		Map(u32 fov_radius, u32 field_pixel_size, IrrlichtDevice* device, dimension2d<u32>& screen_size_);
 		~Map();
 
 		void setCharacter(Character* character_);
@@ -63,7 +61,6 @@ class Map : public IGUIElement, public EventHandler, public AnimatedObject, publ
 		void move(MOVE_DIRECTION dir);
 
 		virtual void react(CEventReceiver* receiver);
-		virtual void anim_update();
 		virtual void showDebugInfo();
 
 		Dimer*	getDimer() const;

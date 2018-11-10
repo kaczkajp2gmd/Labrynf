@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<animfile>
+
+	<file filename="dim" extension=".png" image_count="4">
+
+	<anim tag="DIM" start_frame="0" end_frame="3" delta_frame="200">
+	
+</animfile>

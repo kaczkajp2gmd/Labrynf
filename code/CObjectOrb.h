@@ -11,30 +11,14 @@ using namespace core;
 using namespace video;
 
 
-#define ANIM_IMAGES_COUNT_ORB 3
-
 class ObjectOrb : public GameObject
 {
 private:
-	enum ANIM_ORB
-	{
-		A_IDLE
-	};
-
-	ANIM_ORB anim;
-
 	IVideoDriver* _driver;
-	IGUIImage* image;
-
-	ITexture* texture[ANIM_IMAGES_COUNT_ORB];
-	u32 tex_index;
 
 public:
-	ObjectOrb(rect<s32> rect, IVideoDriver* driver_, IGUIEnvironment* guienv, IGUIElement* parent, s32 id);
+	ObjectOrb(rect<s32> rect, IrrlichtDevice* device, IGUIElement* parent, s32 id, const char* animfile);
 	~ObjectOrb();
 
-	void setAnim(ANIM_ORB anim_);
-
-	virtual void anim_update();
 	virtual void showDebugInfo();
 };

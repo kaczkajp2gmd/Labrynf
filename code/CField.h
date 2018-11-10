@@ -3,7 +3,6 @@
 #include <cassert>
 #include <irrlicht.h>
 #include "CAnimator.h"
-#include "EGameObject.h"
 #include "SFieldCache.h"
 #include "CGameObject.h"
 #include "CObjectRune.h"
@@ -27,7 +26,7 @@ class Field : public IGUIElement
 		Field(u32 pixel_size, FieldCache cache, vector2d<s32> pos, IVideoDriver* driver_, IGUIEnvironment* guienv_, IGUIElement* parent = NULL);
 		~Field();
     
-		void setCache(FieldCache cache, Animator* animator, IVideoDriver* driver_, IGUIEnvironment* guienv_);
+		void setCache(FieldCache cache, IVideoDriver* driver_, IGUIEnvironment* guienv_);
 
 		bool				isBlank() const;
 		GameObject*			getObject() const;

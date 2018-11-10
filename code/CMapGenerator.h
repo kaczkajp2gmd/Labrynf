@@ -8,7 +8,8 @@
 #include <irrlicht.h>
 #include "SFieldCache.h"
 #include "CField.h"
-#include "EExceptions.h"
+
+#include "CGameObjectFactory.h"
 
 // MAP GENERATION ALGORITM PARAMETERS:
 
@@ -23,12 +24,14 @@ typedef irr::core::array<irr::core::array<FieldCache>> T_MAP_CACHE;
 class MapGenerator
 {
 	private:
+		IrrlichtDevice* _device;
+
 		T_MAP_CACHE current_map;
 		core::array<position2d<s32>> runes;
 		core::array<position2d<s32>> orbs;
 
 	public:
-		MapGenerator();
+		MapGenerator(IrrlichtDevice* deivce);
 		~MapGenerator();
 
 		void createMap(u32 size, bool serialize = false, io::path path = "");

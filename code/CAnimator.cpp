@@ -1,7 +1,9 @@
 #include "CAnimator.h"
 
-Animator::Animator(ITimer* timer_)
-	: timer(timer_)
+core::array<AnimatedObject*> Animator::objects;
+ITimer* Animator::timer = NULL;
+
+Animator::Animator()
 {
 
 }
@@ -9,6 +11,11 @@ Animator::Animator(ITimer* timer_)
 Animator::~Animator()
 {
 	objects.clear();
+}
+
+void Animator::setTimer(ITimer* t)
+{
+	timer = t;
 }
 
 void Animator::registerObject(AnimatedObject* obj)
@@ -26,6 +33,9 @@ void Animator::unregisterObject(AnimatedObject* obj)
 
 void Animator::update()
 {
+	if (!timer)
+		return;
+
 	u32 time_now = timer->getTime();
 	
 	for (int i = 0; i < objects.size(); i++)

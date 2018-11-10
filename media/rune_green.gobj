@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<gameobjectfile>
+
+	<animfile filename="rune_green.anim">
+
+	<gameobject type="GOT_RUNE" name="Green Rune" height="128" width="128">
+	
+</gameobjectfile>

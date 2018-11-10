@@ -13,8 +13,8 @@ Field::Field(u32 pixel_size, vector2d<s32> pos, ITexture* texture_, IGUIEnvironm
 Field::Field(u32 pixel_size, FieldCache cache, vector2d<s32> pos, IVideoDriver* driver_, IGUIEnvironment* guienv_, IGUIElement* parent)
 	: IGUIElement(EGUIET_IMAGE, guienv_, parent, -1, rect<s32>(pos.X, pos.Y, pos.X + pixel_size, pos.Y + pixel_size)), PIXEL_SIZE(pixel_size), object(NULL)
 {
-	texture = driver_->getTexture(cache.texture_path);
-	image = guienv_->addImage(rect<s32>(pos.X, pos.Y, pos.X + PIXEL_SIZE, pos.Y + PIXEL_SIZE), parent);
+	texture = cache.texture;
+	image = guienv_->addImage(rect<s32>(pos.X, pos.Y, pos.X + PIXEL_SIZE, pos.Y + PIXEL_SIZE), this);
 
 	image->setImage(texture);
 	image->setScaleImage(true);
@@ -25,39 +25,27 @@ Field::~Field()
     
 }
 
-void Field::setCache(FieldCache cache, Animator* animator, IVideoDriver* driver_, IGUIEnvironment* guienv_)
+void Field::setCache(FieldCache cache, IVideoDriver* driver_, IGUIEnvironment* guienv_)
 {
-	texture = driver_->getTexture(cache.texture_path);
+	texture = cache.texture;
 	image->setImage(texture);
 
 	image->setVisible(!cache.blank);
 
-	
-	if (object)
+
+	if(object && object->getParent() == this)
 	{
-		animator->unregisterObject(object);
-
-		object->remove();
-		object->drop();
-
+		object->setVisible(false);
+		object->setParent(NULL);
 		object = NULL;
 	}
 	
-	if (cache.rune)
+	if (cache.object)
 	{
-		object = new ObjectRune(rect<s32>(0, 0, this->getSize(), this->getSize()), driver_, guienv_, this, GO_RUNE_GREEN);
-		animator->registerObject(object);
+		object = cache.object;
 
-		if (cache.activated)
-			((ObjectRune*)object)->activate(true);
-
-		this->bringToFront(object);
-	}
-	else if (cache.orb)
-	{
-		object = new ObjectOrb(rect<s32>(0, 0, this->getSize(), this->getSize()), driver_, guienv_, this, GO_ORB_GREEN);
-		animator->registerObject(object);
-
+		object->setVisible(true);
+		object->setParent(this);
 		this->bringToFront(object);
 	}
 }

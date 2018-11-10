@@ -1,4 +1,4 @@
-#include "CDebugObject.h"
+#include "IDebugObject.h"
 
 DebugObject::DebugObject()
 {

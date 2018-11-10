@@ -1,17 +1,32 @@
 #include "CGameObject.h"
 
-GameObject::GameObject(EGUI_ELEMENT_TYPE EGUIET_IMAGE, IGUIEnvironment* guienv, IGUIElement* parent, s32 id, core::rect<s32> rect, u32 anim_delta_frame, GAME_OBJECT_TYPE go_type_)
-	: IGUIElement(EGUIET_IMAGE, guienv, parent, id, rect), AnimatedObject(anim_delta_frame), go_type(go_type_)
+GameObject::GameObject(IrrlichtDevice* device, IGUIElement* parent, s32 id, core::rect<s32> rect, core::stringc go_type_, const char* animfile)
+	: IGUIElement(EGUIET_IMAGE, device->getGUIEnvironment(), parent, id, rect), AnimatedObject(animfile, device->getVideoDriver(), device->getFileSystem()), go_type(go_type_)
 {
 
 }
 
 GameObject::~GameObject()
 {
-
+	remove();
 }
 
-GAME_OBJECT_TYPE GameObject::getGOType() const
+void GameObject::setParent(IGUIElement* parent)
+{
+	this->grab();
+
+	if (Parent && Parent != parent)
+		this->remove();
+
+	Parent = parent;
+
+	if (Parent != NULL)
+		Parent->addChild(this);
+	
+	this->drop();
+}
+
+core::stringc GameObject::getGOType() const
 {
 	return go_type;
 }

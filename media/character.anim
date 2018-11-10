@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<animfile>
+
+	<file filename="character" extension=".png" image_count="25">
+
+	<anim tag="IDLE" start_frame="0" end_frame="1" delta_frame="1500">
+	
+	<anim tag="WALK_RIGHT" start_frame="2" end_frame="13" delta_frame="60">
+	
+	<anim tag="WALK_LEFT" start_frame="14" end_frame="24" delta_frame="60">
+	
+</animfile>

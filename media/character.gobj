@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<gameobjectfile>
+
+	<animfile filename="character.anim">
+
+	<gameobject type="GOT_CHARACTER" name="Character" height="100" width="100">
+	
+	<entity movement_speed="5">
+	
+</gameobjectfile>
