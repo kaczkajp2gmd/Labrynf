@@ -86,6 +86,14 @@ void Map::move(MOVE_DIRECTION dir)
 		pos.set(0, -1);
 	else if (dir == MD_DOWN)
 		pos.set(0, 1);
+	else if (dir == MD_DOWN_LEFT)
+		pos.set(-1, 1);
+	else if (dir == MD_DOWN_RIGHT)
+		pos.set(1, 1);
+	else if (dir == MD_UP_LEFT)
+		pos.set(-1, -1);
+	else if (dir == MD_UP_RIGHT)
+		pos.set(1, -1);
 
 	Tiles->move(pos);
 
@@ -207,11 +215,29 @@ void Map::react(CEventReceiver* receiver)
 {
 	if (receiver->IsKeyDown(KEY_KEY_W))
 	{
-		mv_direction = MD_DOWN;
+		if (receiver->IsKeyDown(KEY_KEY_A))
+		{
+			mv_direction = MD_DOWN_RIGHT;
+		}
+		else if (receiver->IsKeyDown(KEY_KEY_D))
+		{
+			mv_direction = MD_DOWN_LEFT;
+		}
+		else
+			mv_direction = MD_DOWN;
 	}
 	else if (receiver->IsKeyDown(KEY_KEY_S))
 	{
-		mv_direction = MD_UP;
+		if (receiver->IsKeyDown(KEY_KEY_A))
+		{
+			mv_direction = MD_UP_RIGHT;
+		}
+		else if (receiver->IsKeyDown(KEY_KEY_D))
+		{
+			mv_direction = MD_UP_LEFT;
+		}
+		else
+			mv_direction = MD_UP;
 	}
 	else if (receiver->IsKeyDown(KEY_KEY_A))
 	{
