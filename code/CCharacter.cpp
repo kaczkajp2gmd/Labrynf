@@ -26,23 +26,10 @@ Character::~Character()
 
 void Character::react(CEventReceiver* receiver)
 {	
-	if (receiver->IsKeyDown(KEY_KEY_W))
-	{
-		this->setAnim("WALK_RIGHT");
-	}
-	else if (receiver->IsKeyDown(KEY_KEY_S))
-	{
-		this->setAnim("WALK_RIGHT");
-	}
-	else if (receiver->IsKeyDown(KEY_KEY_A))
-	{
-		this->setAnim("WALK_LEFT");
-	}
-	else if (receiver->IsKeyDown(KEY_KEY_D))
-	{
-		this->setAnim("WALK_RIGHT");
-	}
-	else
+	if (!receiver->IsKeyDown(KEY_KEY_W) &&
+		!receiver->IsKeyDown(KEY_KEY_S) &&
+		!receiver->IsKeyDown(KEY_KEY_A) &&
+		!receiver->IsKeyDown(KEY_KEY_D))
 		this->setAnim("IDLE");
 
 }

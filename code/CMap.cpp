@@ -110,12 +110,20 @@ void Map::move(MOVE_DIRECTION dir)
 		Tiles->move(position2d<s32>(0, -pos.Y));
 
 	if (final == position2d<s32>(0, 0))
+	{
+		character->setAnim("IDLE");
 		return;
+	}
 
 	handleGOCollision();
 
 
 	delta_moved += final;
+
+	if (final.X > 0)
+		character->setAnim("WALK_LEFT");
+	else
+		character->setAnim("WALK_RIGHT");
 
 
 	if (abs(delta_moved.X) >= _field_pixel_size)
