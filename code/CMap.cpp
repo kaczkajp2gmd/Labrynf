@@ -74,7 +74,7 @@ void Map::setCharacter(Character* character_)
 
 void Map::move(MOVE_DIRECTION dir)
 {
-	position2d<s32> pos;
+	position2d<s32> pos, final(0, 0);
 
 	if (dir == MD_NONE)
 		return;
@@ -95,18 +95,27 @@ void Map::move(MOVE_DIRECTION dir)
 	else if (dir == MD_UP_RIGHT)
 		pos.set(1, -1);
 
-	Tiles->move(pos);
+	Tiles->move(position2d<s32>(pos.X, 0));
+	
+	if (!characterToWallCollision())
+		final.X = pos.X;
+	else
+		Tiles->move(position2d<s32>(-pos.X, 0));
 
-	if (characterToWallCollision())
-	{
-		Tiles->move(-pos);
+	Tiles->move(position2d<s32>(0, pos.Y));
+
+	if (!characterToWallCollision())
+		final.Y = pos.Y;
+	else
+		Tiles->move(position2d<s32>(0, -pos.Y));
+
+	if (final == position2d<s32>(0, 0))
 		return;
-	}
 
 	handleGOCollision();
 
 
-	delta_moved += pos;
+	delta_moved += final;
 
 
 	if (abs(delta_moved.X) >= _field_pixel_size)
