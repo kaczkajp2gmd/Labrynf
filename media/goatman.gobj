@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<gameobjectfile>
+
+	<animfile filename="goatman.anim">
+
+	<gameobject type="GOT_NPC_GOATMAN" name="Goatman" height="100" width="100">
+	
+	<entity movement_time_per_field="300">
+	
+</gameobjectfile>

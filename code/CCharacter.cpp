@@ -1,11 +1,11 @@
 #include "CCharacter.h"
 
-Character::Character(u32 pixel_size, u32 milisecs_per_mv, IrrlichtDevice* device)
+Character::Character(u32 pixel_size, f32 milisecs_per_field, IrrlichtDevice* device)
 	:  ObjectEntity(device, dimension2d<s32>(pixel_size, pixel_size), "GOT_CHARACTER", "character.anim", device->getGUIEnvironment()->getRootGUIElement(), -1),
-	EventHandler(device->getTimer()), _driver(device->getVideoDriver())
+	EventHandler(device->getTimer())
 {
 	setAnim("IDLE");
-	setMovementSpeed(milisecs_per_mv);
+	setTimePerField(milisecs_per_field);
 
 	__debug_inventory = device->getGUIEnvironment()->addStaticText(L"", rect<s32>(0, 200, 100, 400));
 	__debug_inventory->setOverrideColor(SColor(255, 0, 200, 0));

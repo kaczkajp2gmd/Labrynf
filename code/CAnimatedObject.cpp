@@ -28,7 +28,6 @@ AnimatedObject::AnimatedObject(io::path filename, IVideoDriver* driver_, io::IFi
 
 				if (currentSection == L"file")
 				{
-
 					tex_file = xml->getAttributeValueSafe(L"filename");
 					assert(!tex_file.empty());
 

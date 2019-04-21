@@ -1,0 +1,14 @@
+#pragma once
+
+enum MOVE_DIRECTION
+{
+	MD_NONE,
+	MD_UP,
+	MD_DOWN,
+	MD_LEFT,
+	MD_RIGHT,
+	MD_DOWN_RIGHT,
+	MD_DOWN_LEFT,
+	MD_UP_RIGHT,
+	MD_UP_LEFT
+};

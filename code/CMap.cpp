@@ -3,9 +3,8 @@
 Map::Map(u32 fov_radius, u32 field_pixel_size, IrrlichtDevice* device, dimension2d<u32>& screen_size_)
 	: IGUIElement(EGUIET_IMAGE, device->getGUIEnvironment(), device->getGUIEnvironment()->getRootGUIElement(), -1,
 		rect<s32>(0, 0, (fov_radius)* field_pixel_size, (fov_radius)* field_pixel_size)), DebugObject(), EventHandler(device->getTimer()), _driver(device->getVideoDriver()), _guienv(device->getGUIEnvironment()), screen_size(screen_size_), _field_pixel_size(field_pixel_size),
-	delta_moved(0, 0), pos_on_map(0, 0), mv_direction(MD_NONE)
+	delta_moved(0, 0), mv_direction(MD_NONE)
 {
-
 	__debug_position	= _guienv->addStaticText(L"", rect<s32>(0, 0, 200, 20));
 	__debug_runes		= _guienv->addStaticText(L"", rect<s32>(0, 20, 100, 200));
 	__debug_orbs		= _guienv->addStaticText(L"", rect<s32>(100, 20, 200, 200));
@@ -30,7 +29,6 @@ Map::Map(u32 fov_radius, u32 field_pixel_size, IrrlichtDevice* device, dimension
 	mapgen = new MapGenerator(device);
 	mapgen->createMap(10, true, "map0.map");
 	
-	pos_on_map = mapgen->getStartPoint();
 	
 	for (int y = 0; y < fov_radius + 2; y++)
 	{
@@ -44,12 +42,15 @@ Map::Map(u32 fov_radius, u32 field_pixel_size, IrrlichtDevice* device, dimension
 		map.push_back(arr);
 	}
 
-	refreshMap();
+	refreshMap(mapgen->getStartPoint());
 
 	Tiles->setRelativePosition(rect<s32>(-(s32)field_pixel_size, -(s32)field_pixel_size, getMapSize() + field_pixel_size, getMapSize() + field_pixel_size));
 	moveToCenter();
 
 	dimer = new Dimer(this, device);
+
+	GameObjectFactory f(device);
+	NPCGoatman* goatman = (NPCGoatman*) f.instantiateGameObject("media/goatman.gobj", Tiles);
 }
 
 Map::~Map()
@@ -70,6 +71,7 @@ void Map::setCharacter(Character* character_)
 	character = character_;
 
 	character->setRelativePosition(position2d<s32>((screen_size.Width / 2) - (character->getSize() / 2), (screen_size.Height / 2) - (character->getSize() / 2)));
+	character->setPosOnMap(mapgen->getStartPoint());
 }
 
 void Map::move(MOVE_DIRECTION dir)
@@ -97,14 +99,14 @@ void Map::move(MOVE_DIRECTION dir)
 
 	Tiles->move(position2d<s32>(pos.X, 0));
 	
-	if (!characterToWallCollision())
+	if (!objectToWallCollision(character))
 		final.X = pos.X;
 	else
 		Tiles->move(position2d<s32>(-pos.X, 0));
 
 	Tiles->move(position2d<s32>(0, pos.Y));
 
-	if (!characterToWallCollision())
+	if (!objectToWallCollision(character))
 		final.Y = pos.Y;
 	else
 		Tiles->move(position2d<s32>(0, -pos.Y));
@@ -132,12 +134,12 @@ void Map::move(MOVE_DIRECTION dir)
 
 		position2d<s32> norm((delta_moved.X < 0)? 1 : -1, 0);
 
-		if (mapgen->hasField(pos_on_map.X + norm.X, pos_on_map.Y + norm.Y))
-			pos_on_map += norm;
+		if (mapgen->hasField(character->getPosOnMap().X + norm.X, character->getPosOnMap().Y + norm.Y))
+			character->setPosOnMap(character->getPosOnMap() + norm);
 
 		delta_moved.X = 0;
 
-		refreshMap();
+		refreshMap(character->getPosOnMap());
 	}
 	if (abs(delta_moved.Y) >= _field_pixel_size)
 	{
@@ -145,16 +147,16 @@ void Map::move(MOVE_DIRECTION dir)
 
 		position2d<s32> norm(0, (delta_moved.Y < 0) ? 1 : -1);
 
-		if (mapgen->hasField(pos_on_map.X + norm.X, pos_on_map.Y + norm.Y))
-			pos_on_map += norm;
+		if (mapgen->hasField(character->getPosOnMap().X + norm.X, character->getPosOnMap().Y + norm.Y))
+			character->setPosOnMap(character->getPosOnMap() + norm);
 
 		delta_moved.Y = 0;
 
-		refreshMap();
+		refreshMap(character->getPosOnMap());
 	}
 }
 
-void Map::refreshMap()
+void Map::refreshMap(position2d<s32> centerpos)
 {
 	int dx = map[0].size() / 2;
 	int dy = map.size() / 2;
@@ -164,10 +166,10 @@ void Map::refreshMap()
 		{
 			FieldCache cache;
 
-			if (!mapgen->hasField(x + pos_on_map.X - dx, y + pos_on_map.Y - dy))
+			if (!mapgen->hasField(x + centerpos.X - dx, y + centerpos.Y - dy))
 				cache.blank = 1;
 			else
-				cache = mapgen->getFieldCache(x + pos_on_map.X - dx, y + pos_on_map.Y - dy);
+				cache = mapgen->getFieldCache(x + centerpos.X - dx, y + centerpos.Y - dy);
 			
 			map[y][x]->setCache(cache, _driver, _guienv);
 		}
@@ -181,9 +183,9 @@ bool Map::hasField(int x, int y)
 	return (x >= 0 && x < map[0].size() && y >= 0 && y < map.size());
 }
 
-bool Map::characterToWallCollision()
+bool Map::objectToWallCollision(IGUIElement* obj)
 {
-	if (!character || !map.size())
+	if (!obj || !map.size())
 		return false;
 
 	int x = map[0].size() / 2;
@@ -191,7 +193,7 @@ bool Map::characterToWallCollision()
 
 	for (int _y = y - 1; _y <= y + 1; _y++)
 		for (int _x = x - 1; _x <= x + 1; _x++)
-			if (hasField(_x, _y) && map[_y][_x]->isBlank() && character->getAbsolutePosition().isRectCollided(map[_y][_x]->getRect()))
+			if (hasField(_x, _y) && map[_y][_x]->isBlank() && obj->getAbsolutePosition().isRectCollided(map[_y][_x]->getRect()))
 				return true;
 
 	return false;
@@ -222,7 +224,7 @@ void Map::handleGOCollision()
 					break;
 				}
 
-				refreshMap();
+				refreshMap(character->getPosOnMap());
 			}
 		}
 	}
@@ -268,7 +270,9 @@ void Map::react(CEventReceiver* receiver)
 		mv_direction = MD_NONE;
 
 
-	if (timer->getTime() - time_last >= character->getMovementSpeed())
+	f32 v = (f32) _field_pixel_size / character->getTimePerField();
+
+	if (timer->getTime() - time_last >= 1.0 / v)
 	{
 		this->move(mv_direction);
 		time_last = timer->getTime();
@@ -285,7 +289,7 @@ void Map::showDebugInfo()
 			_driver->draw2DRectangleOutline(map[y][x]->getRect(), SColor(255, 200, 0, 0));
 
 	std::wostringstream buff;
-	buff << "Player: " <<  pos_on_map.X << ", " << pos_on_map.Y;
+	buff << "Player: " << character->getPosOnMap().X << ", " << character->getPosOnMap().Y;
 
 	__debug_position->setText(buff.str().c_str());
 
@@ -316,7 +320,7 @@ position2d<s32> Map::mapFieldPosToPosOnMap(int x, int y)
 	int lx = map[0].size() / 2;
 	int ly = map.size() / 2;
 
-	pos.set(x + pos_on_map.X - lx, y + pos_on_map.Y - ly);
+	pos.set(x + character->getPosOnMap().X - lx, y + character->getPosOnMap().Y - ly);
 
 	return pos;
 }

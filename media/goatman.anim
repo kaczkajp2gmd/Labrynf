@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<animfile>
+
+	<file filename="goatman" extension=".png" image_count="1">
+
+	<anim tag="IDLE" start_frame="0" end_frame="0" delta_frame="500">
+	
+</animfile>

@@ -13,7 +13,7 @@
 
 // MAP GENERATION ALGORITM PARAMETERS:
 
-#define MAX_WALLSIZE 0.2	// AS PROPORTION TO MAP SIZE
+#define MAX_WALLSIZE 0.2	// PROPORTION TO MAP SIZE
 
 
 
@@ -39,6 +39,7 @@ class MapGenerator
 		
 		void deleteOrb(position2d<s32> orbpos);
 		void activateRune(position2d<s32> runepos);
+
 		
 		bool							hasField(int x, int y);
 		FieldCache						getFieldCache(int x, int y);

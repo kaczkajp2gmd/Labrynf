@@ -18,10 +18,8 @@ class Character : public ObjectEntity, public EventHandler
 
 		array<core::stringc> inventory;
 
-		IVideoDriver* _driver;
-
 	public:
-		Character(u32 pixel_size, u32 milisecs_per_mv, IrrlichtDevice* device);
+		Character(u32 pixel_size, f32 milisecs_per_field, IrrlichtDevice* device);
 		~Character();
 
 

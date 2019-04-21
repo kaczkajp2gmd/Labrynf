@@ -19,13 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="code\CAIManager.h" />
+    <ClInclude Include="code\CAITrailer.h" />
     <ClInclude Include="code\CAnimatedObject.h" />
     <ClInclude Include="code\CAnimator.h" />
     <ClInclude Include="code\CCharacter.h" />
     <ClInclude Include="code\CDebugManager.h" />
     <ClInclude Include="code\CGameObjectFactory.h" />
+    <ClInclude Include="code\CNPCGoatman.h" />
+    <ClInclude Include="code\EMoveDirection.h" />
+    <ClInclude Include="code\IArtificialIntelligence.h" />
     <ClInclude Include="code\IDebugObject.h" />
     <ClInclude Include="code\CDimer.h" />
+    <ClInclude Include="code\IIntelligentObject.h" />
     <ClInclude Include="code\IObjectEntity.h" />
     <ClInclude Include="code\IEventHandler.h" />
     <ClInclude Include="code\CEventReceiver.h" />
@@ -39,13 +45,18 @@
     <ClInclude Include="code\SFieldCache.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="code\CAIManager.cpp" />
+    <ClCompile Include="code\CAITrailer.cpp" />
     <ClCompile Include="code\CAnimatedObject.cpp" />
     <ClCompile Include="code\CAnimator.cpp" />
     <ClCompile Include="code\CCharacter.cpp" />
     <ClCompile Include="code\CDebugManager.cpp" />
     <ClCompile Include="code\CGameObjectFactory.cpp" />
+    <ClCompile Include="code\CNPCGoatman.cpp" />
+    <ClCompile Include="code\IArtificialIntelligence.cpp" />
     <ClCompile Include="code\IDebugObject.cpp" />
     <ClCompile Include="code\CDimer.cpp" />
+    <ClCompile Include="code\IIntelligentObject.cpp" />
     <ClCompile Include="code\IObjectEntity.cpp" />
     <ClCompile Include="code\IEventHandler.cpp" />
     <ClCompile Include="code\CEventReceiver.cpp" />

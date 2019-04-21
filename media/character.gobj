@@ -5,6 +5,6 @@
 
 	<gameobject type="GOT_CHARACTER" name="Character" height="100" width="100">
 	
-	<entity movement_speed="5">
+	<entity movement_time_per_field="500">
 	
 </gameobjectfile>

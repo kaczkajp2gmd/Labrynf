@@ -4,6 +4,7 @@
 #include "CObjectOrb.h"
 #include "CObjectRune.h"
 #include "CCharacter.h"
+#include "CNPCGoatman.h"
 
 
 class GameObjectFactory

@@ -28,7 +28,7 @@ GameObject* GameObjectFactory::instantiateGameObject(io::path filename, IGUIElem
 	core::stringc type;
 	core::stringc name;
 	s32 x = -1, y = -1;
-	s32 mv_speed = -1;
+	f32 mv_speed = -1;
 
 	core::stringw currentSection;
 
@@ -60,7 +60,7 @@ GameObject* GameObjectFactory::instantiateGameObject(io::path filename, IGUIElem
 			}
 			else if (currentSection == L"entity")
 			{
-				mv_speed = xml->getAttributeValueAsInt(L"movement_speed");
+				mv_speed = xml->getAttributeValueAsFloat(L"movement_time_per_field");
 				assert(mv_speed != -1);
 			}
 
@@ -78,6 +78,8 @@ GameObject* GameObjectFactory::instantiateGameObject(io::path filename, IGUIElem
 		obj = new ObjectOrb(rect<s32>(0, 0, x, y), device, parent, ID, animfile.c_str());
 	else if (type == "GOT_CHARACTER")
 		obj = new Character(x, mv_speed, device);
+	else if (type == "GOT_NPC_GOATMAN")
+		obj = new NPCGoatman(device, dimension2d<s32>(x, y), type, animfile.c_str(), parent, ID);
 
 	obj->setName(name);
 

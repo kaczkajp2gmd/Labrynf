@@ -30,3 +30,18 @@ core::stringc GameObject::getGOType() const
 {
 	return go_type;
 }
+
+void GameObject::anim_update()
+{
+
+}
+
+void GameObject::showDebugInfo()
+{
+
+}
+
+void GameObject::ai_update()
+{
+
+}
